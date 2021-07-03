@@ -1,5 +1,6 @@
 import java.util.Comparator;
 import edu.princeton.cs.algs4.StdDraw;
+import java.lang.Math;
 
 public class Point implements Comparable<Point> {
 
@@ -73,7 +74,7 @@ public class Point implements Comparable<Point> {
         public int compare(Point p1, Point p2) {
             double pp1 = this.p.slopeTo(p1);
             double pp2 = this.p.slopeTo(p2);
-            if (pp1 - pp2 < 0.0001 && pp1 - pp2 > -0.0001) {
+            if (Math.abs(pp1 - pp2) < 0.0000001 || pp1 == pp2) {
                 return 0;
             }
             else if (pp1 > pp2) {
