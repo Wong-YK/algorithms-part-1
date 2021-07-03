@@ -85,6 +85,7 @@ public class PointTest {
         assertEquals(Double.NEGATIVE_INFINITY, p1.slopeTo(p2), 0.0001);
     }
 
+
     @Test
     // points are equal
     public void compareTest1() {
@@ -123,6 +124,19 @@ public class PointTest {
         Point p1 = new Point(0, 1);
         Point p2 = new Point(2, 2);
         assertEquals(-1, c.compare(p1, p2));
+    }
+
+    @Test
+    // reflexivity
+    public void slopeOrderCompareTest1() {
+        Point p = new Point(485, 356);
+        Point q = new Point(485, 345);
+        assertEquals(0, p.slopeOrder().compare(q, q));
+
+    }
+
+    public static void main(String[] args) {
+        System.out.println(Double.POSITIVE_INFINITY == Double.POSITIVE_INFINITY);
     }
 
 }
