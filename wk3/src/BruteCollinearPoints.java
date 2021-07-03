@@ -51,7 +51,8 @@ public class BruteCollinearPoints {
         double p1p2 = p1.slopeTo(p2);
         double p1p3 = p1.slopeTo(p3);
         double p1p4 = p1.slopeTo(p4);
-        return Math.abs(p1p2 - p1p3) < 0.0001 && Math.abs(p1p3 - p1p4) < 0.0001;
+        return (Math.abs(p1p2 - p1p3) < 0.0000001 && Math.abs(p1p3 - p1p4) < 0.0001) ||
+                p1p2 == p1p3 && p1p3 == p1p4;
     }
 
     private static LineSegment maxSeg(Point p1, Point p2, Point p3, Point p4) {
