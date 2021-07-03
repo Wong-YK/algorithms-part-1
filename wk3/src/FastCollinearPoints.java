@@ -25,6 +25,7 @@ public class FastCollinearPoints {
                 }
             }
         }
+        Arrays.sort(points);
         this.points = points;
         this.lineSegments = this.segments();
     }
@@ -36,29 +37,26 @@ public class FastCollinearPoints {
 
     // the line segments
     public LineSegment[] segments() {
-        Point[] copy = deepCopy(this.points);
         LineSegment[] result = new LineSegment[0];
         for (int i = 0; i < this.points.length; i++) {
             Point p = this.points[i];
+            Point[] copy = deepCopy(this.points);
             Arrays.sort(copy, p.slopeOrder());
             for (int j = 1; j < this.points.length;) {
                 Point q = copy[j];
-                Point[] colinearPoints = new Point[0];
+                Point[] collinearPoints = new Point[0];
                 while (p.slopeTo(q) == p.slopeTo(copy[j])) {
-                    colinearPoints = appendPoint(colinearPoints, copy[j]);
-                    if (j < this.points.length - 1) {
-                        j++;
-                    }
-                    else {
-                        j++;
+                    collinearPoints = appendPoint(collinearPoints, copy[j]);
+                    j++;
+                    if (j > this.points.length - 1) {
                         break;
                     }
                 }
-                if (colinearPoints.length >= 3) {
-                    colinearPoints = appendPoint(colinearPoints, p);
-                    Arrays.sort(colinearPoints);
-                    if (colinearPoints[0] == p) {
-                        LineSegment ls = new LineSegment(p, colinearPoints[colinearPoints.length -1]);
+                if (collinearPoints.length >= 3) {
+                    //collinearPoints = appendPoint(collinearPoints, p);
+                    //Arrays.sort(collinearPoints);
+                    if (p.compareTo(collinearPoints[0]) < 0) {
+                        LineSegment ls = new LineSegment(p, collinearPoints[collinearPoints.length -1]);
                         result = appendLS(result, ls);
                     }
                 }
