@@ -1,6 +1,8 @@
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdOut;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class FastCollinearPoints {
@@ -37,50 +39,40 @@ public class FastCollinearPoints {
 
     // the line segments
     public LineSegment[] segments() {
-        LineSegment[] result = new LineSegment[0];
+        ArrayList<LineSegment> result = new ArrayList<LineSegment>();
         for (int i = 0; i < this.points.length; i++) {
             Point p = this.points[i];
             Point[] copy = deepCopy(this.points);
             Arrays.sort(copy, p.slopeOrder());
             for (int j = 1; j < this.points.length;) {
                 Point q = copy[j];
-                Point[] collinearPoints = new Point[0];
+                //Point[] collinearPoints = new Point[0];
+                ArrayList<Point> collinearPoints = new ArrayList<Point>();
                 while (p.slopeTo(q) == p.slopeTo(copy[j])) {
-                    collinearPoints = appendPoint(collinearPoints, copy[j]);
+                    //collinearPoints = appendPoint(collinearPoints, copy[j]);
+                    collinearPoints.add(copy[j]);
                     j++;
                     if (j > this.points.length - 1) {
                         break;
                     }
                 }
-                if (collinearPoints.length >= 3) {
-                    //collinearPoints = appendPoint(collinearPoints, p);
-                    //Arrays.sort(collinearPoints);
-                    if (p.compareTo(collinearPoints[0]) < 0) {
-                        LineSegment ls = new LineSegment(p, collinearPoints[collinearPoints.length -1]);
-                        result = appendLS(result, ls);
+                if (collinearPoints.size() >= 3) {
+                    if (p.compareTo(collinearPoints.get(0)) < 0) {
+                        LineSegment ls = new LineSegment(p, collinearPoints.get(collinearPoints.size() -1));
+                        result.add(ls);
                     }
                 }
             }
         }
+        return toArray(result);
+    }
+
+    private static LineSegment[] toArray(ArrayList<LineSegment> al) {
+        LineSegment[] result = new LineSegment[al.size()];
+        for (int i = 0; i < al.size(); i++) {
+            result[i] = al.get(i);
+        }
         return result;
-    }
-
-    private static Point[] appendPoint(Point[] oldArray, Point obj) {
-        Point[] newArray = new Point[oldArray.length + 1];
-        for (int i = 0; i < oldArray.length; i++) {
-            newArray[i] = oldArray[i];
-        }
-        newArray[newArray.length - 1] = obj;
-        return newArray;
-    }
-
-    private static LineSegment[] appendLS(LineSegment[] oldArray, LineSegment obj) {
-        LineSegment[] newArray = new LineSegment[oldArray.length + 1];
-        for (int i = 0; i < oldArray.length; i++) {
-            newArray[i] = oldArray[i];
-        }
-        newArray[newArray.length - 1] = obj;
-        return newArray;
     }
 
     private static Point[] deepCopy(Point[] original) {
