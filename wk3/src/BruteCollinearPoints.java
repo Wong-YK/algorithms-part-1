@@ -7,6 +7,21 @@ public class BruteCollinearPoints {
 
     // finds all line segments containing 4 points
     public BruteCollinearPoints(Point[] points) {
+        if (points == null) {
+            throw new IllegalArgumentException();
+        }
+        for (Point point: points) {
+            if (point == null) {
+                throw new IllegalArgumentException();
+            }
+        }
+        for (int i = 0; i < points.length; i++) {
+            for (int j = i + 1; j < points.length; j++) {
+                if (points[i] == points[j]) {
+                    throw new IllegalArgumentException();
+                }
+            }
+        }
         this.points = points;
         this.lineSegments = this.segments();
     }
