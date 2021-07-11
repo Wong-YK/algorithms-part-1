@@ -4,9 +4,8 @@ import java.util.Comparator;
 
 public class Solver {
 
-    private class SearchNode implements Comparable<SearchNode> {
+    class SearchNode implements Comparable<SearchNode> {
 
-        public final Comparator<SearchNode> BY_MANHATTAN = new byManhattan();
         private final Board board;
         private final int moves;
         private final SearchNode prevNode;
@@ -21,7 +20,11 @@ public class Solver {
             return (this.board.hamming() + this.moves) - (that.board.hamming() + that.moves);
         }
 
-        private class byManhattan implements Comparator<SearchNode> {
+        public Comparator<SearchNode> manhattanOrder() {
+            return new ByManhattan();
+        }
+
+        private class ByManhattan implements Comparator<SearchNode> {
 
             public int compare(SearchNode sn1, SearchNode sn2) {
                 return (sn1.board.manhattan() + sn1.moves) - (sn2.board.manhattan() + sn2.moves);

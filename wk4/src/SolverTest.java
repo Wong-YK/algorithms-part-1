@@ -8,7 +8,7 @@ public class SolverTest {
 
     /*
 
-    Tests written to pass when SearchNode was taken outside of Solver class
+    Tests written to pass when SearchNode taken outside of Solver class
 
     @Test
     // Hamming distance of s2 < s1
