@@ -1,10 +1,11 @@
 import edu.princeton.cs.algs4.MinPQ;
 
 import java.util.Comparator;
+import java.util.Iterator;
 
 public class Solver {
 
-    class SearchNode implements Comparable<SearchNode> {
+    private class SearchNode implements Comparable<SearchNode> {
 
         private final Board board;
         private final int moves;
@@ -14,6 +15,18 @@ public class Solver {
             this.board = board;
             this.moves = moves;
             this.prevNode = prevNode;
+        }
+
+        public Board getBoard() {
+            return this.board;
+        }
+
+        public int getMoves() {
+            return this.moves;
+        }
+
+        public SearchNode getPrevNode() {
+            return this.prevNode;
         }
 
         public int compareTo(SearchNode that) {
@@ -31,18 +44,41 @@ public class Solver {
             }
 
         }
-
-
-
     }
+
+    private SearchNode finalNode;
 
     // find a solution to the initial board (using the A* algorithm)
     public Solver(Board initial) {
         if (initial == null) {
             throw new IllegalArgumentException();
         }
-
-
+        int n = initial.dimension();
+        int[][] tiles = new int[n][n];
+        for (int row = 0; row < n; row++) {
+            for (int col = 0; col < n; col++) {
+                if (row == n - 1 && col == n - 1) {
+                    tiles[row][col] = 0;
+                }
+                else {
+                    tiles[row][col] = (row * n) + col + 1;
+                }
+            }
+        }
+        Board solved = new Board(tiles);
+        SearchNode sn = new SearchNode(initial, 0, null);
+        MinPQ<SearchNode> mpq = new MinPQ<SearchNode>();
+        mpq.insert(sn);
+        sn = mpq.delMin();
+        while (!(sn.getBoard().equals(solved))) {
+            Iterable<Board> neighbours = sn.getBoard().neighbors();
+            for (Board neighbour: neighbours) {
+                SearchNode newSN = new SearchNode(neighbour, sn.getMoves() + 1, sn);
+                mpq.insert(newSN);
+            }
+            sn = mpq.delMin();
+        }
+        this.finalNode = sn;
     }
 
     // is the initial board solvable? (see below)
@@ -52,7 +88,28 @@ public class Solver {
 
     // min number of moves to solve initial board; -1 if unsolvable
     public int moves() {
-        return -1;
+        return this.finalNode.getMoves();
+    }
+
+    private class Solution implements Iterable<Board> {
+
+        private SearchNode sn = finalNode;
+
+        private class implements Iterator<Board> {
+
+            public boolean hasNext() {
+                return sn.getPrevNode() != null;
+            }
+
+            public void remove() {/* not supported */}
+
+            public Board next() {
+                sn = sn.getPrevNode();
+                return sn.getBoard();
+            }
+
+
+        }
     }
 
     // sequence of boards in a shortest solution; null if unsolvable
