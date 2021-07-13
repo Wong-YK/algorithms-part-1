@@ -5,47 +5,6 @@ import java.util.Iterator;
 
 public class Solver {
 
-    private class SearchNode implements Comparable<SearchNode> {
-
-        private final Board board;
-        private final int moves;
-        private final SearchNode prevNode;
-
-        SearchNode(Board board, int moves, SearchNode prevNode) {
-            this.board = board;
-            this.moves = moves;
-            this.prevNode = prevNode;
-        }
-
-        public Board getBoard() {
-            return this.board;
-        }
-
-        public int getMoves() {
-            return this.moves;
-        }
-
-        public SearchNode getPrevNode() {
-            return this.prevNode;
-        }
-
-        public int compareTo(SearchNode that) {
-            return (this.board.hamming() + this.moves) - (that.board.hamming() + that.moves);
-        }
-
-        public Comparator<SearchNode> manhattanOrder() {
-            return new ByManhattan();
-        }
-
-        private class ByManhattan implements Comparator<SearchNode> {
-
-            public int compare(SearchNode sn1, SearchNode sn2) {
-                return (sn1.board.manhattan() + sn1.moves) - (sn2.board.manhattan() + sn2.moves);
-            }
-
-        }
-    }
-
     private SearchNode finalNode;
 
     // find a solution to the initial board (using the A* algorithm)
@@ -91,30 +50,81 @@ public class Solver {
         return this.finalNode.getMoves();
     }
 
+    // sequence of boards in a shortest solution; null if unsolvable
+    public Iterable<Board> solution() {
+        return new Solution();
+    }
+
+    private class SearchNode implements Comparable<SearchNode> {
+
+        private final Board board;
+        private final int moves;
+        private final SearchNode prevNode;
+
+        SearchNode(Board board, int moves, SearchNode prevNode) {
+            this.board = board;
+            this.moves = moves;
+            this.prevNode = prevNode;
+        }
+
+        public Board getBoard() {
+            return this.board;
+        }
+
+        public int getMoves() {
+            return this.moves;
+        }
+
+        public SearchNode getPrevNode() {
+            return this.prevNode;
+        }
+
+        public int compareTo(SearchNode that) {
+            return (this.board.hamming() + this.moves) - (that.board.hamming() + that.moves);
+        }
+
+        public Comparator<SearchNode> manhattanOrder() {
+            return new ByManhattan();
+        }
+
+        private class ByManhattan implements Comparator<SearchNode> {
+
+            public int compare(SearchNode sn1, SearchNode sn2) {
+                return (sn1.board.manhattan() + sn1.moves) - (sn2.board.manhattan() + sn2.moves);
+            }
+        }
+    }
+
     private class Solution implements Iterable<Board> {
 
-        private SearchNode sn = finalNode;
+        public Iterator<Board> iterator() { return new SolutionIterator(); }
 
-        private class implements Iterator<Board> {
+        private class SolutionIterator implements Iterator<Board> {
+
+            private SearchNode sn;
+
+            SolutionIterator() {
+                SearchNode sn = finalNode;
+                while (sn.prevNode != null) {
+                    sn = sn.prevNode;
+                }
+            }
 
             public boolean hasNext() {
-                return sn.getPrevNode() != null;
+                return sn == finalNode;
             }
 
             public void remove() {/* not supported */}
 
             public Board next() {
-                sn = sn.getPrevNode();
+                SearchNode node = finalNode;
+                while (node.prevNode != sn) {
+                    node = node.prevNode;
+                }
+                sn = node;
                 return sn.getBoard();
             }
-
-
         }
-    }
-
-    // sequence of boards in a shortest solution; null if unsolvable
-    public Iterable<Board> solution() {
-        return null;
     }
 
     // test client (see below)

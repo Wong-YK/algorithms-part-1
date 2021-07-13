@@ -66,4 +66,28 @@ public class SolverTest {
     }
     */
 
+    @Test
+    // n = 2 board solved in 0 moves
+    public void movesTest1() {
+        Board b = new Board(new int[][] {{1, 2}, {3, 0}});
+        Solver s = new Solver(b);
+        assertEquals(0, s.moves());
+    }
+
+    @Test
+    // n = 2 board solved in 1 move
+    public void movesTest2() {
+        Board b = new Board(new int[][] {{1, 2}, {0, 3}});
+        Solver s = new Solver(b);
+        assertEquals(1, s.moves());
+    }
+
+    @Test
+    // n = 2 board solved in 3 moves
+    public void movesTest3() {
+        Board b = new Board(new int[][] {{0, 1}, {2, 3}});
+        Solver s = new Solver(b);
+        assertEquals(3, s.moves());
+    }
+
 }
