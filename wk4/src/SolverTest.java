@@ -85,9 +85,25 @@ public class SolverTest {
     @Test
     // n = 2 board solved in 3 moves
     public void movesTest3() {
-        Board b = new Board(new int[][] {{0, 1}, {2, 3}});
+        Board b = new Board(new int[][] {{2, 0}, {1, 3}});
         Solver s = new Solver(b);
         assertEquals(3, s.moves());
+    }
+
+    @Test
+    // n = 4 board solved in 6 moves
+    public void movesTest4() {
+        Board b = new Board(new int[][] {{0, 1, 2, 4}, {5, 6, 3, 7}, {9, 10, 11, 8}, {13, 14, 15, 12}});
+        Solver s = new Solver(b);
+        assertEquals(6, s.moves());
+    }
+
+    @Test
+    // 0 moves to solve puzzle
+    public void solutionTest1() {
+        Board b = new Board(new int[][] {{1, 2}, {0, 3}});
+        Solver solver = new Solver(b);
+        Iterable<Board> solution = solver.solution();
     }
 
 }

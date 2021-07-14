@@ -25,19 +25,31 @@ public class Solver {
             }
         }
         Board solved = new Board(tiles);
-        SearchNode sn = new SearchNode(initial, 0, null);
+        SearchNode current = new SearchNode(initial, 0, null);
         MinPQ<SearchNode> mpq = new MinPQ<SearchNode>();
-        mpq.insert(sn);
-        sn = mpq.delMin();
-        while (!(sn.getBoard().equals(solved))) {
-            Iterable<Board> neighbours = sn.getBoard().neighbors();
+        mpq.insert(current);
+        current = mpq.delMin();
+        while (!(current.getBoard().equals(solved))) {
+            Iterable<Board> neighbours = current.getBoard().neighbors();
             for (Board neighbour: neighbours) {
-                SearchNode newSN = new SearchNode(neighbour, sn.getMoves() + 1, sn);
-                mpq.insert(newSN);
+                // critical optimization
+                SearchNode previous = current;
+                boolean useless = false;
+                while (previous != null) {
+                    if (previous.board.equals(neighbour)) {
+                        useless = true;
+                        break;
+                    }
+                    previous = previous.prevNode;
+                }
+                if (!useless) {
+                    SearchNode newSN = new SearchNode(neighbour, current.getMoves() + 1, current);
+                    mpq.insert(newSN);
+                }
             }
-            sn = mpq.delMin();
+            current = mpq.delMin();
         }
-        this.finalNode = sn;
+        this.finalNode = current;
     }
 
     // is the initial board solvable? (see below)
@@ -104,24 +116,25 @@ public class Solver {
             private SearchNode sn;
 
             SolutionIterator() {
-                SearchNode sn = finalNode;
-                while (sn.prevNode != null) {
-                    sn = sn.prevNode;
+                SearchNode initial = finalNode;
+                while (initial.prevNode != null) {
+                    initial = initial.prevNode;
                 }
+                this.sn = initial;
             }
 
             public boolean hasNext() {
-                return sn == finalNode;
+                return sn != finalNode;
             }
 
             public void remove() {/* not supported */}
 
             public Board next() {
-                SearchNode node = finalNode;
-                while (node.prevNode != sn) {
-                    node = node.prevNode;
+                SearchNode next = finalNode;
+                while (next.prevNode != this.sn) {
+                    next = next.prevNode;
                 }
-                sn = node;
+                this.sn = next;
                 return sn.getBoard();
             }
         }
@@ -129,7 +142,12 @@ public class Solver {
 
     // test client (see below)
     public static void main(String[] args) {
-
+        Board b = new Board(new int[][] {{1, 2}, {0, 3}});
+        Solver solver = new Solver(b);
+        Iterable<Board> solution = solver.solution();
+        for (Board board: solution) {
+            System.out.println(board);
+        }
     }
 
 }
