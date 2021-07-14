@@ -99,11 +99,34 @@ public class SolverTest {
     }
 
     @Test
-    // 0 moves to solve puzzle
+    // n = 2 board solved in 1 move
     public void solutionTest1() {
-        Board b = new Board(new int[][] {{1, 2}, {0, 3}});
-        Solver solver = new Solver(b);
+        Board initial = new Board(new int[][] {{1, 2}, {0, 3}});
+        Board b = new Board(new int[][] {{1, 2}, {3, 0}});
+        Board[] expected = {initial, b};
+        Solver solver = new Solver(initial);
         Iterable<Board> solution = solver.solution();
+        int index = 0;
+        for (Board board: solution) {
+            //assertTrue(board.equals(expected[index++]));
+            assertEquals(expected[index++], board);
+        }
+    }
+
+    @Test
+    // n = 2 board solved in 3 moves
+    public void solutionTest2() {
+        Board b1 = new Board(new int[][] {{2, 0}, {1, 3}});
+        Board b2 = new Board(new int[][] {{0, 2}, {1, 3}});
+        Board b3 = new Board(new int[][] {{1, 2}, {0, 3}});
+        Board b4 = new Board(new int[][] {{1, 2}, {3, 0}});
+        Board[] expected = {b1, b2, b3, b4};
+        Solver solver = new Solver(b1);
+        Iterable<Board> solution = solver.solution();
+        int index = 0;
+        for (Board board: solution) {
+            assertEquals(expected[index++], board);
+        }
     }
 
 }
