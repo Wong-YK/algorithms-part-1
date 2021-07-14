@@ -116,11 +116,7 @@ public class Solver {
             private SearchNode sn;
 
             SolutionIterator() {
-                SearchNode initial = finalNode;
-                while (initial.prevNode != null) {
-                    initial = initial.prevNode;
-                }
-                this.sn = initial;
+                this.sn = null;
             }
 
             public boolean hasNext() {
@@ -142,12 +138,6 @@ public class Solver {
 
     // test client (see below)
     public static void main(String[] args) {
-        Board b = new Board(new int[][] {{1, 2}, {0, 3}});
-        Solver solver = new Solver(b);
-        Iterable<Board> solution = solver.solution();
-        for (Board board: solution) {
-            System.out.println(board);
-        }
     }
 
 }
