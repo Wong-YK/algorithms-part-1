@@ -62,7 +62,7 @@ public class Solver {
 
     // is the initial board solvable? (see below)
     public boolean isSolvable() {
-        return false;
+        return this.finalNode != null;
     }
 
     // min number of moves to solve initial board; -1 if unsolvable
@@ -111,9 +111,7 @@ public class Solver {
             return this.moves;
         }
 
-        public SearchNode getPrevNode() {
-            return this.prevNode;
-        }
+        //public SearchNode getPrevNode() { return this.prevNode;}
 
         public int compareTo(SearchNode that) {
             return (this.hammingDistance + this.moves) - (that.hammingDistance + that.moves);
@@ -163,12 +161,12 @@ public class Solver {
     // test client (see below)
     public static void main(String[] args) {
         //MinPQ<SearchNode> mpq = new MinPQ<SearchNode>();
-        Board b = new Board(new int[][] {{1, 2, 3}, {4, 5, 6}, {8, 7, 0}});
+        Board b = new Board(new int[][] {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}});
         //SearchNode sn = new SearchNode(b, 0, null);
         //mpq.insert(sn);
         //System.out.println(inMPQ(b, mpq));
         Solver s = new Solver(b);
-        System.out.println(s.moves());
+        System.out.println(s.isSolvable());
     }
 
 }
