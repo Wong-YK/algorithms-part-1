@@ -99,17 +99,26 @@ public class Board {
 
     // a board that is obtained by exchanging any pair of tiles
     public Board twin() {
-        int r1;
-        int c1;
-        int r2;
-        int c2;
-        do {
-            r1 = StdRandom.uniform(this.n);
-            c1 = StdRandom.uniform(this.n);
-            r2 = StdRandom.uniform(this.n);
-            c2 = StdRandom.uniform(this.n);
+        int r1 = -1;
+        int c1 = -1;
+        int r2 = -1;
+        int c2 = -1;
+        rowLoop:
+        for (int i = 0; i < this.n; i++) {
+            for (int j = 0; j < this.n; j++) {
+                if (this.tiles[i][j] != 0) {
+                    if (r1 == -1 && c1 == -1) {
+                        r1 = i;
+                        c1 = j;
+                    }
+                    else {
+                        r2 = i;
+                        c2 = j;
+                        break rowLoop;
+                    }
+                }
+            }
         }
-        while (this.tiles[r1][c1] == 0 || this.tiles[r2][c2] == 0);
         int[][] t = deepCopy();
         swap(r1, c1, r2, c2, t);
         return new Board(t);
