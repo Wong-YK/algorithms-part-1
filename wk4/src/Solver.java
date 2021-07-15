@@ -81,7 +81,7 @@ public class Solver {
         return new Solution();
     }
 
-    public static boolean inMPQ(Board b, MinPQ<SearchNode> mpq) {
+    private static boolean inMPQ(Board b, MinPQ<SearchNode> mpq) {
         for (SearchNode searchNode: mpq) {
             if (searchNode.board.equals(b)) {
                 return true;

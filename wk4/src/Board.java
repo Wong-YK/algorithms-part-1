@@ -1,7 +1,6 @@
 import java.lang.Math;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Random;
 
 import edu.princeton.cs.algs4.StdRandom;
 
@@ -131,7 +130,7 @@ public class Board {
         return Math.abs(row - arrangedRow) + Math.abs(col - arrangedCol);
     }
 
-    public class NeighbourIterable implements Iterable<Board> {
+    private class NeighbourIterable implements Iterable<Board> {
 
         private final Board[] neighbours;
 
