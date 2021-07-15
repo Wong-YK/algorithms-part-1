@@ -1,5 +1,6 @@
+import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.MinPQ;
-
+import edu.princeton.cs.algs4.StdOut;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -27,32 +28,31 @@ public class Solver {
         Board solved = new Board(tiles);
         SearchNode current = new SearchNode(initial, 0, null);
         SearchNode currentTwin = new SearchNode(initial.twin(), 0, null);
-        MinPQ<SearchNode> mpq = new MinPQ<SearchNode>();
-        MinPQ<SearchNode> mpqTwin = new MinPQ<SearchNode>();
+        MinPQ<SearchNode> mpq = new MinPQ<SearchNode>(current.manhattanOrder());
+        MinPQ<SearchNode> mpqTwin = new MinPQ<SearchNode>(currentTwin.manhattanOrder());
         mpq.insert(current);
         current = mpq.delMin();
         mpqTwin.insert(currentTwin);
         currentTwin = mpqTwin.delMin();
-        while (!(current.getBoard().equals(solved) || currentTwin.getBoard().equals(solved))) {
-            Iterable<Board> neighbours = current.getBoard().neighbors();
-            Iterable<Board> neighboursTwin = currentTwin.getBoard().neighbors();
+        while (!(current.board.equals(solved) || currentTwin.board.equals(solved))) {
+            Iterable<Board> neighbours = current.board.neighbors();
+            Iterable<Board> neighboursTwin = currentTwin.board.neighbors();
             for (Board neighbour: neighbours) {
-                // critical optimization
                 if (!inMPQ(neighbour, mpq)) {
-                    SearchNode newSN = new SearchNode(neighbour, current.getMoves() + 1, current);
+                    SearchNode newSN = new SearchNode(neighbour, current.moves + 1, current);
                     mpq.insert(newSN);
                 }
             }
             for (Board neighbourTwin: neighboursTwin) {
                 if (!inMPQ(neighbourTwin, mpqTwin)) {
-                    SearchNode newSN = new SearchNode(neighbourTwin, currentTwin.getMoves() + 1, currentTwin);
+                    SearchNode newSN = new SearchNode(neighbourTwin, currentTwin.moves + 1, currentTwin);
                     mpqTwin.insert(newSN);
                 }
             }
             current = mpq.delMin();
             currentTwin = mpqTwin.delMin();
         }
-        if (currentTwin.getBoard().equals(solved)) {
+        if (currentTwin.board.equals(solved)) {
             this.finalNode = null;
         }
         else {
@@ -70,11 +70,14 @@ public class Solver {
         if (this.finalNode == null) {
             return -1;
         }
-        return this.finalNode.getMoves();
+        return this.finalNode.moves;
     }
 
     // sequence of boards in a shortest solution; null if unsolvable
     public Iterable<Board> solution() {
+        if (this.finalNode == null) {
+            return null;
+        }
         return new Solution();
     }
 
@@ -102,16 +105,6 @@ public class Solver {
             this.hammingDistance = board.hamming();
             this.manhattanDistance = board.manhattan();
         }
-
-        public Board getBoard() {
-            return this.board;
-        }
-
-        public int getMoves() {
-            return this.moves;
-        }
-
-        //public SearchNode getPrevNode() { return this.prevNode;}
 
         public int compareTo(SearchNode that) {
             return (this.hammingDistance + this.moves) - (that.hammingDistance + that.moves);
@@ -153,20 +146,33 @@ public class Solver {
                     next = next.prevNode;
                 }
                 this.sn = next;
-                return sn.getBoard();
+                return sn.board;
             }
         }
     }
 
     // test client (see below)
     public static void main(String[] args) {
-        //MinPQ<SearchNode> mpq = new MinPQ<SearchNode>();
-        Board b = new Board(new int[][] {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}});
-        //SearchNode sn = new SearchNode(b, 0, null);
-        //mpq.insert(sn);
-        //System.out.println(inMPQ(b, mpq));
-        Solver s = new Solver(b);
-        System.out.println(s.isSolvable());
+        // create initial board from file
+        In in = new In(args[0]);
+        int n = in.readInt();
+        int[][] tiles = new int[n][n];
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                tiles[i][j] = in.readInt();
+        Board initial = new Board(tiles);
+
+        // solve the puzzle
+        Solver solver = new Solver(initial);
+
+        // print solution to standard output
+        if (!solver.isSolvable())
+            StdOut.println("No solution possible");
+        else {
+            StdOut.println("Minimum number of moves = " + solver.moves());
+            for (Board board : solver.solution())
+                StdOut.println(board);
+        }
     }
 
 }
