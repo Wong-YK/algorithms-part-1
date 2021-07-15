@@ -49,7 +49,7 @@ public class Board {
                 if (n == this.n * this.n) {
                     n = 0;
                 }
-                if (this.tiles[row][col] != n) {
+                if (this.tiles[row][col] != n && n != 0) {
                     result++;
                 }
             }
@@ -120,8 +120,7 @@ public class Board {
         int arrangedRow;
         int arrangedCol;
         if (num == 0) {
-            arrangedRow = this.n - 1;
-            arrangedCol = this.n - 1;
+            return 0;
         }
         else {
             arrangedRow = (num - 1) / this.n;
