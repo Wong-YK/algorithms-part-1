@@ -72,11 +72,15 @@ public class Solver {
         private final Board board;
         private final int moves;
         private final SearchNode prevNode;
+        private final int hammingDistance;
+        private final int manhattanDistance;
 
         SearchNode(Board board, int moves, SearchNode prevNode) {
             this.board = board;
             this.moves = moves;
             this.prevNode = prevNode;
+            this.hammingDistance = board.hamming();
+            this.manhattanDistance = board.manhattan();
         }
 
         public Board getBoard() {
@@ -92,7 +96,7 @@ public class Solver {
         }
 
         public int compareTo(SearchNode that) {
-            return (this.board.hamming() + this.moves) - (that.board.hamming() + that.moves);
+            return (this.hammingDistance + this.moves) - (that.hammingDistance + that.moves);
         }
 
         public Comparator<SearchNode> manhattanOrder() {
@@ -102,7 +106,7 @@ public class Solver {
         private class ByManhattan implements Comparator<SearchNode> {
 
             public int compare(SearchNode sn1, SearchNode sn2) {
-                return (sn1.board.manhattan() + sn1.moves) - (sn2.board.manhattan() + sn2.moves);
+                return (sn1.manhattanDistance + sn1.moves) - (sn2.manhattanDistance + sn2.moves);
             }
         }
     }
