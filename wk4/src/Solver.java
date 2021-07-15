@@ -38,23 +38,26 @@ public class Solver {
             Iterable<Board> neighboursTwin = currentTwin.getBoard().neighbors();
             for (Board neighbour: neighbours) {
                 // critical optimization
-                SearchNode previous = current;
-                boolean useless = false;
-                while (previous != null) {
-                    if (previous.board.equals(neighbour)) {
-                        useless = true;
-                        break;
-                    }
-                    previous = previous.prevNode;
-                }
-                if (!useless) {
+                if (!inMPQ(neighbour, mpq)) {
                     SearchNode newSN = new SearchNode(neighbour, current.getMoves() + 1, current);
                     mpq.insert(newSN);
                 }
             }
+            for (Board neighbourTwin: neighboursTwin) {
+                if (!inMPQ(neighbourTwin, mpqTwin)) {
+                    SearchNode newSN = new SearchNode(neighbourTwin, currentTwin.getMoves() + 1, currentTwin);
+                    mpqTwin.insert(newSN);
+                }
+            }
             current = mpq.delMin();
+            currentTwin = mpqTwin.delMin();
         }
-        this.finalNode = current;
+        if (currentTwin.getBoard().equals(solved)) {
+            this.finalNode = null;
+        }
+        else {
+            this.finalNode = current;
+        }
     }
 
     // is the initial board solvable? (see below)
@@ -64,6 +67,9 @@ public class Solver {
 
     // min number of moves to solve initial board; -1 if unsolvable
     public int moves() {
+        if (this.finalNode == null) {
+            return -1;
+        }
         return this.finalNode.getMoves();
     }
 
@@ -156,11 +162,13 @@ public class Solver {
 
     // test client (see below)
     public static void main(String[] args) {
-        MinPQ<SearchNode> mpq = new MinPQ<SearchNode>();
-        Board b = new Board(new int[][] {{1, 2, 3}, {4, 5, 0}, {7, 8, 6}});
-        SearchNode sn = new SearchNode(b, 0, null);
-        mpq.insert(sn);
-        System.out.println(inMPQ(b, mpq));
+        //MinPQ<SearchNode> mpq = new MinPQ<SearchNode>();
+        Board b = new Board(new int[][] {{1, 2, 3}, {4, 5, 6}, {8, 7, 0}});
+        //SearchNode sn = new SearchNode(b, 0, null);
+        //mpq.insert(sn);
+        //System.out.println(inMPQ(b, mpq));
+        Solver s = new Solver(b);
+        System.out.println(s.moves());
     }
 
 }
