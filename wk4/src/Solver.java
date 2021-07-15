@@ -26,11 +26,16 @@ public class Solver {
         }
         Board solved = new Board(tiles);
         SearchNode current = new SearchNode(initial, 0, null);
+        SearchNode currentTwin = new SearchNode(initial.twin(), 0, null);
         MinPQ<SearchNode> mpq = new MinPQ<SearchNode>();
+        MinPQ<SearchNode> mpqTwin = new MinPQ<SearchNode>();
         mpq.insert(current);
         current = mpq.delMin();
-        while (!(current.getBoard().equals(solved))) {
+        mpqTwin.insert(currentTwin);
+        currentTwin = mpqTwin.delMin();
+        while (!(current.getBoard().equals(solved) || currentTwin.getBoard().equals(solved))) {
             Iterable<Board> neighbours = current.getBoard().neighbors();
+            Iterable<Board> neighboursTwin = currentTwin.getBoard().neighbors();
             for (Board neighbour: neighbours) {
                 // critical optimization
                 SearchNode previous = current;
@@ -67,7 +72,16 @@ public class Solver {
         return new Solution();
     }
 
-    private class SearchNode implements Comparable<SearchNode> {
+    public static boolean inMPQ(Board b, MinPQ<SearchNode> mpq) {
+        for (SearchNode searchNode: mpq) {
+            if (searchNode.board.equals(b)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static class SearchNode implements Comparable<SearchNode> {
 
         private final Board board;
         private final int moves;
@@ -142,6 +156,11 @@ public class Solver {
 
     // test client (see below)
     public static void main(String[] args) {
+        MinPQ<SearchNode> mpq = new MinPQ<SearchNode>();
+        Board b = new Board(new int[][] {{1, 2, 3}, {4, 5, 0}, {7, 8, 6}});
+        SearchNode sn = new SearchNode(b, 0, null);
+        mpq.insert(sn);
+        System.out.println(inMPQ(b, mpq));
     }
 
 }
