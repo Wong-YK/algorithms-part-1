@@ -13,21 +13,6 @@ public class Solver {
         if (initial == null) {
             throw new IllegalArgumentException();
         }
-        /*
-        int n = initial.dimension();
-        int[][] tiles = new int[n][n];
-        for (int row = 0; row < n; row++) {
-            for (int col = 0; col < n; col++) {
-                if (row == n - 1 && col == n - 1) {
-                    tiles[row][col] = 0;
-                }
-                else {
-                    tiles[row][col] = (row * n) + col + 1;
-                }
-            }
-        }
-        Board solved = new Board(tiles);
-        */
         SearchNode current = new SearchNode(initial, 0, null);
         SearchNode currentTwin = new SearchNode(initial.twin(), 0, null);
         MinPQ<SearchNode> mpq = new MinPQ<SearchNode>(current.manhattanOrder());
@@ -40,13 +25,13 @@ public class Solver {
             Iterable<Board> neighbours = current.board.neighbors();
             Iterable<Board> neighboursTwin = currentTwin.board.neighbors();
             for (Board neighbour: neighbours) {
-                if (!inMPQ(neighbour, mpq)) {
+                if (!isInserted(neighbour, current)) {
                     SearchNode newSN = new SearchNode(neighbour, current.moves + 1, current);
                     mpq.insert(newSN);
                 }
             }
             for (Board neighbourTwin: neighboursTwin) {
-                if (!inMPQ(neighbourTwin, mpqTwin)) {
+                if (!isInserted(neighbourTwin, currentTwin)) {
                     SearchNode newSN = new SearchNode(neighbourTwin, currentTwin.moves + 1, currentTwin);
                     mpqTwin.insert(newSN);
                 }
@@ -83,13 +68,13 @@ public class Solver {
         return new Solution();
     }
 
-    private static boolean inMPQ(Board b, MinPQ<SearchNode> mpq) {
-        for (SearchNode searchNode: mpq) {
-            if (searchNode.board.equals(b)) {
-                return true;
-            }
+    private static boolean isInserted(Board b1, SearchNode current) {
+        SearchNode previous = current.prevNode;
+        if (previous == null) {
+            return false;
         }
-        return false;
+        Board b2 = previous.board;
+        return b1.equals(b2);
     }
 
     private static class SearchNode implements Comparable<SearchNode> {
@@ -155,8 +140,8 @@ public class Solver {
 
     // test client (see below)
     public static void main(String[] args) {
-        // Board b = new Board(new int[][] {{5, 1, 8}, {2, 7, 3}, {4, 0, 6}});
-        Board b = new Board(new int[][] {{7, 8, 5}, {4, 0, 2}, {3, 6, 1}});
+        Board b = new Board(new int[][] {{5, 1, 8}, {2, 7, 3}, {4, 0, 6}});
+        //Board b = new Board(new int[][] {{7, 8, 5}, {4, 0, 2}, {3, 6, 1}});
         Solver s = new Solver(b);
         System.out.println(s.moves());
         /*
