@@ -160,6 +160,8 @@ public class BoardTest {
         assertFalse(b1.equals(b2));
     }
 
+    /*
+
     @Test
     // 4 neighbours
     public void NeighbourIteratorTest1() {
@@ -204,6 +206,8 @@ public class BoardTest {
             assertTrue(neighbour.equals(neighbours[index++]));
         }
     }
+
+    */
 
 
 }

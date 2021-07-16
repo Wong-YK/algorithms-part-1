@@ -1,3 +1,4 @@
+import edu.princeton.cs.algs4.MinPQ;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -127,6 +128,13 @@ public class SolverTest {
         for (Board board: solution) {
             assertEquals(expected[index++], board);
         }
+    }
+
+    @Test
+    // board already in mpq
+    public void inMPQTest1() {
+
+
     }
 
 }
