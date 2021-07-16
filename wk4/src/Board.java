@@ -12,7 +12,8 @@ public class Board {
     // create a board from an n-by-n array of tiles,
     // where tiles[row][col] = tile at (row, col)
     public Board(int[][] tiles) {
-        this.tiles = tiles;
+        int[][] tilesCopy = deepCopy(tiles);
+        this.tiles = tilesCopy;
         this.n = tiles.length;
     }
 
@@ -119,7 +120,7 @@ public class Board {
                 }
             }
         }
-        int[][] t = deepCopy();
+        int[][] t = deepCopy(this.tiles);
         swap(r1, c1, r2, c2, t);
         return new Board(t);
     }
@@ -146,20 +147,20 @@ public class Board {
             // find coordinates for 0 tile
             int zeroRow = -1;
             int zeroCol = -1;
+            rowloop:
             for (int row = 0; row < dimension(); row++) {
                 for (int col = 0; col < dimension(); col++) {
                     if (tiles[row][col] == 0) {
                         zeroRow = row;
                         zeroCol = col;
-                        break;
+                        break rowloop;
                     }
                 }
-                if (zeroRow >= 0) break;
             }
             // generate adjacent coordinates
             ArrayList<int[]> adjCoords = new ArrayList<int[]>();
             int[] adj1 = {zeroRow + 1, zeroCol};
-            if (adj1[0] < n) {
+            if (adj1[0] < dimension()) {
                 adjCoords.add(adj1);
             }
             int[] adj2 = {zeroRow - 1, zeroCol};
@@ -167,7 +168,7 @@ public class Board {
                 adjCoords.add(adj2);
             }
             int[] adj3 = {zeroRow, zeroCol + 1};
-            if (adj3[1] < n) {
+            if (adj3[1] < dimension()) {
                 adjCoords.add(adj3);
             }
             int[] adj4 = {zeroRow, zeroCol - 1};
@@ -177,7 +178,7 @@ public class Board {
             // generate array of neighbours
             Board[] neighbours = new Board[adjCoords.size()];
             for (int i = 0; i < adjCoords.size(); i++) {
-                int[][] neighbourTiles = deepCopy();
+                int[][] neighbourTiles = deepCopy(tiles);
                 swap(zeroRow, zeroCol, adjCoords.get(i)[0], adjCoords.get(i)[1], neighbourTiles);
                 Board b = new Board(neighbourTiles);
                 neighbours[i] = b;
@@ -206,10 +207,10 @@ public class Board {
         }
     }
 
-    private int[][] deepCopy() {
-        int[][] result = new int[this.n][this.n];
-        for (int row = 0; row < n; row++) {
-            for (int col = 0; col < n; col++) {
+    private static int[][] deepCopy(int[][] tiles) {
+        int[][] result = new int[tiles.length][tiles.length];
+        for (int row = 0; row < tiles.length; row++) {
+            for (int col = 0; col < tiles.length; col++) {
                 result[row][col] = tiles[row][col];
             }
         }

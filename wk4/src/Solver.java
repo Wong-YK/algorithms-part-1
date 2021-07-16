@@ -13,6 +13,7 @@ public class Solver {
         if (initial == null) {
             throw new IllegalArgumentException();
         }
+        /*
         int n = initial.dimension();
         int[][] tiles = new int[n][n];
         for (int row = 0; row < n; row++) {
@@ -26,6 +27,7 @@ public class Solver {
             }
         }
         Board solved = new Board(tiles);
+        */
         SearchNode current = new SearchNode(initial, 0, null);
         SearchNode currentTwin = new SearchNode(initial.twin(), 0, null);
         MinPQ<SearchNode> mpq = new MinPQ<SearchNode>(current.manhattanOrder());
@@ -34,7 +36,7 @@ public class Solver {
         current = mpq.delMin();
         mpqTwin.insert(currentTwin);
         currentTwin = mpqTwin.delMin();
-        while (!(current.board.equals(solved) || currentTwin.board.equals(solved))) {
+        while (!(current.board.isGoal() || currentTwin.board.isGoal())) {
             Iterable<Board> neighbours = current.board.neighbors();
             Iterable<Board> neighboursTwin = currentTwin.board.neighbors();
             for (Board neighbour: neighbours) {
@@ -52,7 +54,7 @@ public class Solver {
             current = mpq.delMin();
             currentTwin = mpqTwin.delMin();
         }
-        if (currentTwin.board.equals(solved)) {
+        if (currentTwin.manhattanDistance == 0) {
             this.finalNode = null;
         }
         else {
@@ -153,6 +155,11 @@ public class Solver {
 
     // test client (see below)
     public static void main(String[] args) {
+        // Board b = new Board(new int[][] {{5, 1, 8}, {2, 7, 3}, {4, 0, 6}});
+        Board b = new Board(new int[][] {{7, 8, 5}, {4, 0, 2}, {3, 6, 1}});
+        Solver s = new Solver(b);
+        System.out.println(s.moves());
+        /*
         // create initial board from file
         In in = new In(args[0]);
         int n = in.readInt();
@@ -173,6 +180,7 @@ public class Solver {
             for (Board board : solver.solution())
                 StdOut.println(board);
         }
+    */
     }
 
 }
