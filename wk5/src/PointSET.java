@@ -22,11 +22,17 @@ public class PointSET {
 
     // add the point to the set (if it is not already in the set)
     public void insert(Point2D p) {
+        if (p == null) {
+            throw new IllegalArgumentException();
+        }
         this.points.add(p);
     }
 
     // does the set contain point p?
     public boolean contains(Point2D p) {
+        if (p == null) {
+            throw new IllegalArgumentException();
+        }
         return this.points.contains(p);}
 
     // draw all points to standard draw
@@ -38,6 +44,9 @@ public class PointSET {
 
     // all points that are inside the rectangle (or on the boundary)
     public Iterable<Point2D> range(RectHV rect) {
+        if (rect == null) {
+            throw new IllegalArgumentException();
+        }
         SET<Point2D> result = new SET<Point2D>();
         for (Point2D p: this.points) {
             if (p.x() >= rect.xmin() && p.x() <= rect.xmax() && p.y() >= rect.ymin() && p.y() <= rect.ymin()) {
@@ -49,6 +58,9 @@ public class PointSET {
 
     // a nearest neighbor in the set to point p; null if the set is empty
     public Point2D nearest(Point2D p) {
+        if (p == null) {
+            throw new IllegalArgumentException();
+        }
         Point2D result = null;
         double min = -1;
         for (Point2D pp: this.points) {
@@ -62,5 +74,6 @@ public class PointSET {
     }
 
     // unit testing of the methods (optional)
-    public static void main(String[] args) {}
+    public static void main(String[] args) {
+    }
 }
