@@ -1,6 +1,8 @@
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
 
+import java.awt.*;
+
 public class KdTree {
 
     public static class Node {
@@ -27,13 +29,15 @@ public class KdTree {
     }
 
     // is the set empty?
-    public boolean isEmpty() {return false;}
+    public boolean isEmpty() {return this.size == 0;}
 
     // number of points in the set
-    public int size() {return -1;}
+    public int size() {return this.size;}
 
     // add the point to the set (if it is not already in the set)
-    public void insert(Point2D p) {}
+    public void insert(Point2D p) {
+        this.root = insert(this.root, p, true);
+    }
 
     // does the set contain point p?
     public boolean contains(Point2D p) {return false;}
@@ -46,6 +50,21 @@ public class KdTree {
 
     // a nearest neighbor in the set to point p; null if the set is empty
     public Point2D nearest(Point2D p) {return null;}
+
+    private Node insert(Node n, Point2D p, boolean compareX) {
+        if (n == null) {
+            return new Node(p);
+        }
+        if (compareX) {
+            if (p.x() < n.key.x()) { n.left = insert(n.left, p, false); }
+            else if (p.x() > n.key.x()) { n.right = insert(n.right, p, false); }
+        }
+        else {
+            if (p.y() < n.key.y()) { n.left = insert(n.left, p, true); }
+            else if (p.y() > n.key.y()) { n.right = insert(n.right, p, true); }
+        }
+        return n;
+    }
 
     // unit testing of the methods (optional)
     public static void main(String[] args) {}
