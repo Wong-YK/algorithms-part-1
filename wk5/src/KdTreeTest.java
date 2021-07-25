@@ -130,6 +130,62 @@ public class KdTreeTest {
     }
 
     @Test
+    // Search for node in KdTree of size 1 containing that node
+    public void containsTest1() {
+        KdTree kdt = new KdTree();
+        Point2D p1 = new Point2D(0.5, 0.5);
+        Point2D p2 = new Point2D(0.5, 0.5);
+        kdt.insert(p1);
+        assertTrue(kdt.contains(p2));
+    }
+
+    @Test
+    // Search for node in KdTree of size 1 not containing that node
+    public void containsTest2() {
+        KdTree kdt = new KdTree();
+        Point2D p1 = new Point2D(0.5, 0.5);
+        Point2D p2 = new Point2D(0.6, 0.75);
+        kdt.insert(p1);
+        assertFalse(kdt.contains(p2));
+    }
+
+    @Test
+    // Search for node in KdTree of size 5 containing that node
+    public void containsTest3() {
+        KdTree kdt = new KdTree();
+        Point2D p1 = new Point2D(0.8, 0.3);
+        Point2D p2 = new Point2D(0.5, 0.5);
+        Point2D p3 = new Point2D(0.6, 0.75);
+        Point2D p4 = new Point2D(0.2, 0.1);
+        Point2D p5 = new Point2D(0.1, 0.95);
+        Point2D p6 = new Point2D(0.8, 0.3);
+        kdt.insert(p2);
+        kdt.insert(p3);
+        kdt.insert(p4);
+        kdt.insert(p5);
+        kdt.insert(p6);
+        assertTrue(kdt.contains(p1));
+    }
+
+    @Test
+    // Search for node in KdTree of size 5 not containing that node
+    public void containsTest4() {
+        KdTree kdt = new KdTree();
+        Point2D p1 = new Point2D(0.63, 0.43);
+        Point2D p2 = new Point2D(0.5, 0.5);
+        Point2D p3 = new Point2D(0.6, 0.75);
+        Point2D p4 = new Point2D(0.2, 0.1);
+        Point2D p5 = new Point2D(0.1, 0.95);
+        Point2D p6 = new Point2D(0.8, 0.3);
+        kdt.insert(p2);
+        kdt.insert(p3);
+        kdt.insert(p4);
+        kdt.insert(p5);
+        kdt.insert(p6);
+        assertFalse(kdt.contains(p1));
+    }
+
+    @Test
     // draw an example KdTree with 4 nodes
     public void drawTest1() {
         KdTree kdt = new KdTree();

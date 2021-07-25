@@ -2,8 +2,6 @@ import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
 import edu.princeton.cs.algs4.StdDraw;
 
-import java.awt.*;
-
 public class KdTree {
 
     public static class Node {
@@ -20,8 +18,8 @@ public class KdTree {
 
     }
 
-    public Node root;
-    public int size;
+    private Node root;
+    private int size;
 
     // construct an empty set of points
     public KdTree() {
@@ -42,7 +40,32 @@ public class KdTree {
     }
 
     // does the set contain point p?
-    public boolean contains(Point2D p) {return false;}
+    public boolean contains(Point2D p) {
+        Node currentNode = this.root;
+        boolean compareX = true;
+        while (currentNode != null) {
+            if (currentNode.key.equals(p)) { return true; }
+            if (compareX) {
+                if (p.x() < currentNode.key.x()) {
+                    currentNode = currentNode.left;
+                }
+                else if (p.x() > currentNode.key.x()) {
+                    currentNode = currentNode.right;
+                }
+                compareX = false;
+            }
+            else {
+                if (p.y() < currentNode.key.y()) {
+                    currentNode = currentNode.left;
+                }
+                else if (p.y() > currentNode.key.y()) {
+                    currentNode = currentNode.right;
+                }
+                compareX = true;
+            }
+        }
+        return false;
+    }
 
     // draw all points to standard draw
     public void draw() {
@@ -107,5 +130,6 @@ public class KdTree {
 
     // unit testing of the methods (optional)
     public static void main(String[] args) {
+
     }
 }
