@@ -1,6 +1,9 @@
 import org.junit.Test;
 import static org.junit.Assert.*;
 import edu.princeton.cs.algs4.Point2D;
+import edu.princeton.cs.algs4.RectHV;
+
+import java.util.ArrayList;
 
 public class KdTreeTest {
 
@@ -215,6 +218,18 @@ public class KdTreeTest {
         kdt.insert(p4);
         kdt.insert(p5);
         kdt.draw();
+    }
+
+    @Test
+    // KdTree of size 1 with point enclosed by rectangle
+    public void rangeTest1() {
+        RectHV r = new RectHV(0.2, 0.2, 0.7, 0.7);
+        Point2D p1 = new Point2D(0.5, 0.5);
+        KdTree kdt = new KdTree();
+        kdt.insert(p1);
+        ArrayList<Point2D> points = (ArrayList<Point2D>) kdt.range(r);
+        assertTrue(points.contains(p1));
+        System.out.println("hello world");
     }
 
 

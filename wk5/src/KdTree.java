@@ -2,6 +2,8 @@ import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
 import edu.princeton.cs.algs4.StdDraw;
 
+import java.util.ArrayList;
+
 public class KdTree {
 
     public static class Node {
@@ -74,7 +76,10 @@ public class KdTree {
     }
 
     // all points that are inside the rectangle (or on the boundary)
-    public Iterable<Point2D> range(RectHV rect) {return null;}
+    public Iterable<Point2D> range(RectHV rect) {
+        ArrayList<Point2D> result = new ArrayList<Point2D>();
+        enclosedPoints(this.root, result, rect, false);
+        return result;}
 
     // a nearest neighbor in the set to point p; null if the set is empty
     public Point2D nearest(Point2D p) {return null;}
@@ -125,6 +130,26 @@ public class KdTree {
             }
             drawNode(n.left, n, true, xMin, xMax, yMin, yMax);
             drawNode(n.right, n, true, xMin, xMax, yMin, yMax);
+        }
+    }
+
+    private void enclosedPoints(Node n, ArrayList<Point2D> a, RectHV r, boolean isHorizontal) {
+        if (n == null) { return; }
+        if (r.contains(n.key)) { a.add(n.key); }
+        RectHV left = createSubtreeRectangle(r, n, isHorizontal, true);
+        if (r.intersects(left)) { enclosedPoints(n.left, a, r, !isHorizontal); }
+        RectHV right = createSubtreeRectangle(r, n, isHorizontal, false);
+        if (r.intersects(right)) { enclosedPoints(n.right, a, r, !isHorizontal); }
+    }
+
+    private RectHV createSubtreeRectangle(RectHV r, Node n, boolean isHorizontal, boolean isLeft) {
+        if (isHorizontal) {
+            if (isLeft) { return new RectHV(r.xmin(), r.ymin(), r.xmax(), n.key.y()); }
+            else { return new RectHV(r.xmin(), n.key.y(), r.xmax(), r.ymax()); }
+        }
+        else {
+            if (isLeft) { return new RectHV(r.xmin(), r.ymin(), n.key.x(), r.ymax()); }
+            else { return new RectHV(n.key.x(), r.ymin(), r.xmax(), r.ymax()); }
         }
     }
 
