@@ -232,5 +232,16 @@ public class KdTreeTest {
         System.out.println("hello world");
     }
 
+    @Test
+    // KdTree of size 1 with point not enclosed by rectangle
+    public void rangeTest2() {
+        RectHV r = new RectHV(0.4, 0.4, 0.6, 0.6);
+        Point2D p1 = new Point2D(0.1, 0.2);
+        KdTree kdt = new KdTree();
+        kdt.insert(p1);
+        ArrayList<Point2D> points = (ArrayList<Point2D>) kdt.range(r);
+        assertFalse(points.contains(p1));
+    }
+
 
 }
