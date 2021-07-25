@@ -47,7 +47,7 @@ public class KdTree {
     // draw all points to standard draw
     public void draw() {
         Node origin = new Node(new Point2D(0.0, 0.0));
-        drawNode(this.root, origin, false);
+        drawNode(this.root, origin, false, 0.0, 1.0, 0.0, 1.0);
     }
 
     // all points that are inside the rectangle (or on the boundary)
@@ -71,7 +71,7 @@ public class KdTree {
         return n;
     }
 
-    private void drawNode(Node n, Node parent, boolean compareX) {
+    private void drawNode(Node n, Node parent, boolean compareX, double xMin, double xMax, double yMin, double yMax) {
         if (n == null) {
             return;
         }
@@ -79,33 +79,33 @@ public class KdTree {
         StdDraw.filledCircle(n.key.x(), n.key.y(), 0.01);
         if (compareX) {
             StdDraw.setPenColor(StdDraw.BLUE);
-            if (n.key.x() < parent.key.x()) { StdDraw.line(0.0, n.key.y(), parent.key.x(), n.key.y()); }
-            else if (n.key.x() > parent.key.x()) { StdDraw.line(parent.key.x(), n.key.y(), 1.0, n.key.y()); }
-            drawNode(n.left, n, false);
-            drawNode(n.right, n, false);
+            if (n.key.x() < parent.key.x()) {
+                xMax = parent.key.x();
+                StdDraw.line(xMin, n.key.y(), parent.key.x(), n.key.y());
+            }
+            else if (n.key.x() > parent.key.x()) {
+                xMin = parent.key.x();
+                StdDraw.line(parent.key.x(), n.key.y(), xMax, n.key.y());
+            }
+            drawNode(n.left, n, false, xMin, xMax, yMin, yMax);
+            drawNode(n.right, n, false, xMin, xMax, yMin, yMax);
         }
         else {
             StdDraw.setPenColor(StdDraw.RED);
-            if (n.key.y() < parent.key.y()) { StdDraw.line(n.key.x(), 0.0, n.key.x(), parent.key.y()); }
-            else if (n.key.y() > parent.key.y()) { StdDraw.line(n.key.x(), parent.key.y(), n.key.x(), 1.0); }
-            drawNode(n.left, n, true);
-            drawNode(n.right, n, true);
+            if (n.key.y() < parent.key.y()) {
+                yMax = parent.key.y();
+                StdDraw.line(n.key.x(), yMin, n.key.x(), parent.key.y());
+            }
+            else if (n.key.y() > parent.key.y()) {
+                yMin = parent.key.y();
+                StdDraw.line(n.key.x(), parent.key.y(), n.key.x(), yMax);
+            }
+            drawNode(n.left, n, true, xMin, xMax, yMin, yMax);
+            drawNode(n.right, n, true, xMin, xMax, yMin, yMax);
         }
     }
 
     // unit testing of the methods (optional)
     public static void main(String[] args) {
-        KdTree kdt = new KdTree();
-        Point2D p1 = new Point2D(0.7, 0.2);
-        Point2D p2 = new Point2D(0.5, 0.4);
-        Point2D p3 = new Point2D(0.2, 0.3);
-        Point2D p4 = new Point2D(0.4, 0.7);
-        Point2D p5 = new Point2D(0.9, 0.6);
-        kdt.insert(p1);
-        kdt.insert(p2);
-        kdt.insert(p3);
-        kdt.insert(p4);
-        kdt.insert(p5);
-        kdt.draw();
     }
 }
