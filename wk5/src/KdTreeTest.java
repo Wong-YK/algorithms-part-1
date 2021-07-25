@@ -12,6 +12,28 @@ public class KdTreeTest {
     }
 
     @Test
+    // empty BST
+    public void isEmptyTest1() {
+        KdTree kdt = new KdTree();
+        assertTrue(kdt.isEmpty());
+    }
+
+    @Test
+    // non-empty BST
+    public void isEmptyTest2() {
+        KdTree kdt = new KdTree();
+        kdt.insert(new Point2D(0.3, 0.2));
+        assertFalse(kdt.isEmpty());
+    }
+
+    @Test
+    // BST of size 0
+    public void sizeTest1() {
+        KdTree kdt = new KdTree();
+        assertEquals(0, kdt.size());
+    }
+
+    @Test
     // Insert single Point2D into BST
     public void insertTest1() {
         KdTree kdt = new KdTree();
@@ -65,8 +87,6 @@ public class KdTreeTest {
         kdt.draw();
     }
 
-
-    /*
     @Test
     // draw an example KdTree with 4 nodes
     public void drawTest1() {
@@ -98,7 +118,6 @@ public class KdTreeTest {
         kdt.insert(p5);
         kdt.draw();
     }
-    */
 
 
 }
