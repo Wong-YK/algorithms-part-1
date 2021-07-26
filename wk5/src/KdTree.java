@@ -78,7 +78,8 @@ public class KdTree {
     // all points that are inside the rectangle (or on the boundary)
     public Iterable<Point2D> range(RectHV rect) {
         ArrayList<Point2D> result = new ArrayList<Point2D>();
-        enclosedPoints(this.root, result, rect, false);
+        RectHV unitSquare = new RectHV(0.0, 0.0, 1.0, 1.0);
+        enclosedPoints(this.root, result, rect, unitSquare, false);
         return result;}
 
     // a nearest neighbor in the set to point p; null if the set is empty
@@ -133,13 +134,13 @@ public class KdTree {
         }
     }
 
-    private void enclosedPoints(Node n, ArrayList<Point2D> a, RectHV r, boolean isHorizontal) {
+    private void enclosedPoints(Node n, ArrayList<Point2D> a, RectHV r, RectHV r1, boolean isHorizontal) {
         if (n == null) { return; }
         if (r.contains(n.key)) { a.add(n.key); }
-        RectHV left = createSubtreeRectangle(r, n, isHorizontal, true);
-        if (r.intersects(left)) { enclosedPoints(n.left, a, r, !isHorizontal); }
-        RectHV right = createSubtreeRectangle(r, n, isHorizontal, false);
-        if (r.intersects(right)) { enclosedPoints(n.right, a, r, !isHorizontal); }
+        RectHV left = createSubtreeRectangle(r1, n, isHorizontal, true);
+        if (r.intersects(left)) { enclosedPoints(n.left, a, r, left, !isHorizontal); }
+        RectHV right = createSubtreeRectangle(r1, n, isHorizontal, false);
+        if (r.intersects(right)) { enclosedPoints(n.right, a, r, right, !isHorizontal); }
     }
 
     private RectHV createSubtreeRectangle(RectHV r, Node n, boolean isHorizontal, boolean isLeft) {
