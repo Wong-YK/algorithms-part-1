@@ -171,14 +171,8 @@ public class KdTree {
                 nearest =  findNearestNeighbour(n.left, qp, nearest, left, !isHorizontal);
             }
             else if ( (nearest.distanceTo(qp) > left.distanceTo(qp)) && (nearest.distanceTo(qp) > right.distanceTo(qp))) {
-                Point2D leftNearest = findNearestNeighbour(n.left, qp, nearest, left, !isHorizontal);
-                Point2D rightNearest = findNearestNeighbour(n.right, qp, nearest, right, !isHorizontal);
-                if (leftNearest.distanceTo(qp) < rightNearest.distanceTo(qp)) {
-                    nearest = leftNearest;
-                }
-                else {
-                    nearest = rightNearest;
-                }
+                nearest = findNearestNeighbour(n.left, qp, nearest, left, !isHorizontal);
+                nearest = findNearestNeighbour(n.right, qp, nearest, right, !isHorizontal);
             }
         }
         else if ((isHorizontal && qp.y() > n.key.y()) || (!isHorizontal && qp.x() > n.key.x())) {
@@ -190,14 +184,8 @@ public class KdTree {
                 nearest =  findNearestNeighbour(n.left, qp, nearest, left, !isHorizontal);
             }
             else if ( (nearest.distanceTo(qp) > left.distanceTo(qp)) && (nearest.distanceTo(qp) > right.distanceTo(qp))) {
-                Point2D rightNearest = findNearestNeighbour(n.right, qp, nearest, right, !isHorizontal);
-                Point2D leftNearest = findNearestNeighbour(n.left, qp, nearest, left, !isHorizontal);
-                if (leftNearest.distanceTo(qp) < rightNearest.distanceTo(qp)) {
-                    nearest = leftNearest;
-                }
-                else {
-                    nearest = rightNearest;
-                }
+                nearest = findNearestNeighbour(n.right, qp, nearest, right, !isHorizontal);
+                nearest = findNearestNeighbour(n.left, qp, nearest, left, !isHorizontal);
             }
         }
         return nearest;
@@ -205,7 +193,8 @@ public class KdTree {
 
     // unit testing of the methods (optional)
     public static void main(String[] args) {
-
+        Point2D qp = new Point2D(0.7, 0.7);
+        System.out.println();
 
     }
 }

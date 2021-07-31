@@ -314,5 +314,34 @@ public class KdTreeTest {
         assertEquals(p, kdt.nearest(qp));
     }
 
+    @Test
+    // Nearest neighbour in KdTree of size 2
+    public void nearestTest2() {
+        Point2D p1 = new Point2D(0.2, 0.3);
+        Point2D p2 = new Point2D(0.6,  0.5);
+        KdTree kdt = new KdTree();
+        kdt.insert(p1);
+        kdt.insert(p2);
+        Point2D qp = new Point2D(0.7, 0.7);
+        assertEquals(p2, kdt.nearest(qp));
+    }
+
+    @Test
+    // Nearest neighbour in KdTree of size 5
+    public void nearestTest3() {
+        Point2D p1 = new Point2D(0.2, 0.3);
+        Point2D p2 = new Point2D(0.6,  0.5);
+        Point2D p3 = new Point2D(0.1, 0.8);
+        Point2D p4 = new Point2D(0.9, 0.1);
+        Point2D p5 = new Point2D(0.5, 0.85);
+        KdTree kdt = new KdTree();
+        kdt.insert(p1);
+        kdt.insert(p2);
+        kdt.insert(p3);
+        kdt.insert(p4);
+        kdt.insert(p5);
+        Point2D qp = new Point2D(0.7, 0.7);
+        assertEquals(p2, kdt.nearest(qp));
+    }
 
 }
