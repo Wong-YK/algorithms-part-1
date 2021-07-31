@@ -229,7 +229,6 @@ public class KdTreeTest {
         kdt.insert(p1);
         ArrayList<Point2D> points = (ArrayList<Point2D>) kdt.range(r);
         assertTrue(points.contains(p1));
-        System.out.println("hello world");
     }
 
     @Test
@@ -241,6 +240,68 @@ public class KdTreeTest {
         kdt.insert(p1);
         ArrayList<Point2D> points = (ArrayList<Point2D>) kdt.range(r);
         assertFalse(points.contains(p1));
+    }
+
+    @Test
+    // KdTree of size 5 with 2 points enclosed by rectangle
+    public void rangeTest3() {
+        RectHV r = new RectHV(0.6, 0.0, 1.0, 1.0);
+        Point2D p1 = new Point2D(0.2, 0.2);
+        Point2D p2 = new Point2D(0.1, 0.8);
+        Point2D p3 = new Point2D(0.5, 0.4);
+        Point2D p4 = new Point2D(0.7, 0.9);
+        Point2D p5 = new Point2D(0.9, 0.5);
+        KdTree kdt = new KdTree();
+        kdt.insert(p1);
+        kdt.insert(p2);
+        kdt.insert(p3);
+        kdt.insert(p4);
+        kdt.insert(p5);
+        ArrayList<Point2D> points = (ArrayList<Point2D>) kdt.range(r);
+        assertFalse(points.contains(p1));
+        assertFalse(points.contains(p2));
+        assertFalse(points.contains(p3));
+        assertTrue(points.contains(p4));
+        assertTrue(points.contains(p5));
+    }
+
+    @Test
+    // KdTree of size 10 with 5 points enclosed by rectangle
+    public void rangeTest4() {
+        RectHV r = new RectHV(0.05, 0.1, 0.4, 0.9);
+        Point2D p1 = new Point2D(0.2, 0.2);
+        Point2D p2 = new Point2D(0.1, 0.8);
+        Point2D p3 = new Point2D(0.5, 0.4);
+        Point2D p4 = new Point2D(0.7, 0.9);
+        Point2D p5 = new Point2D(0.9, 0.5);
+        Point2D p6 = new Point2D(0.8, 0.1);
+        Point2D p7 = new Point2D(0.15, 0.6);
+        Point2D p8 = new Point2D(0.05, 0.85);
+        Point2D p9 = new Point2D(0.3, 0.3);
+        Point2D p10 = new Point2D(0.85, 0.95);
+        KdTree kdt = new KdTree();
+        kdt.insert(p1);
+        kdt.insert(p2);
+        kdt.insert(p3);
+        kdt.insert(p4);
+        kdt.insert(p5);
+        kdt.insert(p6);
+        kdt.insert(p7);
+        kdt.insert(p8);
+        kdt.insert(p9);
+        kdt.insert(p10);
+        kdt.draw();
+        ArrayList<Point2D> points = (ArrayList<Point2D>) kdt.range(r);
+        assertTrue(points.contains(p1));
+        assertTrue(points.contains(p2));
+        assertFalse(points.contains(p3));
+        assertFalse(points.contains(p4));
+        assertFalse(points.contains(p5));
+        assertFalse(points.contains(p6));
+        assertTrue(points.contains(p7));
+        assertTrue(points.contains(p8));
+        assertTrue(points.contains(p9));
+        assertFalse(points.contains(p10));
     }
 
 

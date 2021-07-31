@@ -79,7 +79,7 @@ public class KdTree {
     public Iterable<Point2D> range(RectHV rect) {
         ArrayList<Point2D> result = new ArrayList<Point2D>();
         RectHV unitSquare = new RectHV(0.0, 0.0, 1.0, 1.0);
-        enclosedPoints(this.root, result, rect, unitSquare, false);
+        findPointsContained(this.root, result, rect, unitSquare, false);
         return result;}
 
     // a nearest neighbor in the set to point p; null if the set is empty
@@ -134,16 +134,16 @@ public class KdTree {
         }
     }
 
-    private void enclosedPoints(Node n, ArrayList<Point2D> a, RectHV r, RectHV r1, boolean isHorizontal) {
+    private void findPointsContained(Node n, ArrayList<Point2D> a, RectHV qr, RectHV nr, boolean isHorizontal) {
         if (n == null) { return; }
-        if (r.contains(n.key)) { a.add(n.key); }
-        RectHV left = createSubtreeRectangle(r1, n, isHorizontal, true);
-        if (r.intersects(left)) { enclosedPoints(n.left, a, r, left, !isHorizontal); }
-        RectHV right = createSubtreeRectangle(r1, n, isHorizontal, false);
-        if (r.intersects(right)) { enclosedPoints(n.right, a, r, right, !isHorizontal); }
+        if (qr.contains(n.key)) { a.add(n.key); }
+        RectHV left = pruneTree(nr, n, isHorizontal, true);
+        if (qr.intersects(left)) { findPointsContained(n.left, a, qr, left, !isHorizontal); }
+        RectHV right = pruneTree(nr, n, isHorizontal, false);
+        if (qr.intersects(right)) { findPointsContained(n.right, a, qr, right, !isHorizontal); }
     }
 
-    private RectHV createSubtreeRectangle(RectHV r, Node n, boolean isHorizontal, boolean isLeft) {
+    private RectHV pruneTree(RectHV r, Node n, boolean isHorizontal, boolean isLeft) {
         if (isHorizontal) {
             if (isLeft) { return new RectHV(r.xmin(), r.ymin(), r.xmax(), n.key.y()); }
             else { return new RectHV(r.xmin(), n.key.y(), r.xmax(), r.ymax()); }
@@ -156,6 +156,7 @@ public class KdTree {
 
     // unit testing of the methods (optional)
     public static void main(String[] args) {
+
 
     }
 }
