@@ -83,7 +83,10 @@ public class KdTree {
         return result;}
 
     // a nearest neighbor in the set to point p; null if the set is empty
-    public Point2D nearest(Point2D p) {return null;}
+    public Point2D nearest(Point2D p) {
+        RectHV unitSquare = new RectHV(0.0, 0.0, 1.0, 1.0);
+        return findNearestNeighbour(this.root, p, this.root.key, unitSquare, false);
+    }
 
     private Node insert(Node n, Point2D p, boolean compareX) {
         if (n == null) {
@@ -152,6 +155,52 @@ public class KdTree {
             if (isLeft) { return new RectHV(r.xmin(), r.ymin(), n.key.x(), r.ymax()); }
             else { return new RectHV(n.key.x(), r.ymin(), r.xmax(), r.ymax()); }
         }
+    }
+
+    private Point2D findNearestNeighbour(Node n, Point2D qp, Point2D nearest, RectHV nr, boolean isHorizontal) {
+        if (n == null) { return nearest; }
+        if (n.key.distanceTo(qp) < nearest.distanceTo(qp)) { nearest = n.key; }
+        RectHV left = pruneTree(nr, n, true, true);
+        RectHV right = pruneTree(nr, n, false, false);
+        if ( (isHorizontal && qp.y() < n.key.y()) || (!isHorizontal && qp.x() < n.key.x()) ) {
+            // first left then right
+            if (nearest.distanceTo(qp) < left.distanceTo(qp) && (nearest.distanceTo(qp) > right.distanceTo(qp))) {
+                nearest =  findNearestNeighbour(n.right, qp, nearest, right, !isHorizontal);
+            }
+            else if ((nearest.distanceTo(qp) < right.distanceTo(qp)) && (nearest.distanceTo(qp) > left.distanceTo(qp))) {
+                nearest =  findNearestNeighbour(n.left, qp, nearest, left, !isHorizontal);
+            }
+            else if ( (nearest.distanceTo(qp) > left.distanceTo(qp)) && (nearest.distanceTo(qp) > right.distanceTo(qp))) {
+                Point2D leftNearest = findNearestNeighbour(n.left, qp, nearest, left, !isHorizontal);
+                Point2D rightNearest = findNearestNeighbour(n.right, qp, nearest, right, !isHorizontal);
+                if (leftNearest.distanceTo(qp) < rightNearest.distanceTo(qp)) {
+                    nearest = leftNearest;
+                }
+                else {
+                    nearest = rightNearest;
+                }
+            }
+        }
+        else if ((isHorizontal && qp.y() > n.key.y()) || (!isHorizontal && qp.x() > n.key.x())) {
+            // first right then left
+            if (nearest.distanceTo(qp) < left.distanceTo(qp) && (nearest.distanceTo(qp) > right.distanceTo(qp))) {
+                nearest =  findNearestNeighbour(n.right, qp, nearest, right, !isHorizontal);
+            }
+            else if ((nearest.distanceTo(qp) < right.distanceTo(qp)) && (nearest.distanceTo(qp) > left.distanceTo(qp))) {
+                nearest =  findNearestNeighbour(n.left, qp, nearest, left, !isHorizontal);
+            }
+            else if ( (nearest.distanceTo(qp) > left.distanceTo(qp)) && (nearest.distanceTo(qp) > right.distanceTo(qp))) {
+                Point2D rightNearest = findNearestNeighbour(n.right, qp, nearest, right, !isHorizontal);
+                Point2D leftNearest = findNearestNeighbour(n.left, qp, nearest, left, !isHorizontal);
+                if (leftNearest.distanceTo(qp) < rightNearest.distanceTo(qp)) {
+                    nearest = leftNearest;
+                }
+                else {
+                    nearest = rightNearest;
+                }
+            }
+        }
+        return nearest;
     }
 
     // unit testing of the methods (optional)

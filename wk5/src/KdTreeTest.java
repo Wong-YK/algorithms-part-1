@@ -304,5 +304,15 @@ public class KdTreeTest {
         assertFalse(points.contains(p10));
     }
 
+    @Test
+    // Nearest neighbour in KdTree of size 1
+    public void nearestTest1() {
+        Point2D p = new Point2D(0.2, 0.3);
+        KdTree kdt = new KdTree();
+        kdt.insert(p);
+        Point2D qp = new Point2D(0.7, 0.7);
+        assertEquals(p, kdt.nearest(qp));
+    }
+
 
 }
