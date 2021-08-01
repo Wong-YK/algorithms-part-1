@@ -161,8 +161,8 @@ public class KdTree {
     private Point2D findNearestNeighbour(Node n, Point2D qp, Point2D nearest, RectHV nr, boolean isHorizontal) {
         if (n == null) { return nearest; }
         if (n.key.distanceTo(qp) < nearest.distanceTo(qp)) { nearest = n.key; }
-        RectHV left = pruneTree(nr, n, true, true);
-        RectHV right = pruneTree(nr, n, false, false);
+        RectHV left = pruneTree(nr, n, isHorizontal, true);
+        RectHV right = pruneTree(nr, n, isHorizontal, false);
         if (nearest.distanceTo(qp) < left.distanceTo(qp) && (nearest.distanceTo(qp) < right.distanceTo(qp))) {
             // nearest remains unchanged
         }
@@ -187,5 +187,17 @@ public class KdTree {
 
     // unit testing of the methods (optional)
     public static void main(String[] args) {
+        Point2D p1 = new Point2D(0.7, 0.2);
+        Point2D p2 = new Point2D(0.5, 0.4);
+        Point2D p3 = new Point2D(0.2, 0.3);
+        Point2D p4 = new Point2D(0.4, 0.7);
+        Point2D p5 = new Point2D(0.9, 0.6);
+        KdTree kdt = new KdTree();
+        kdt.insert(p1);
+        kdt.insert(p2);
+        kdt.insert(p3);
+        kdt.insert(p4);
+        kdt.insert(p5);
+        kdt.draw();
     }
 }
