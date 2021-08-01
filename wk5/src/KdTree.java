@@ -50,7 +50,7 @@ public class KdTree {
                 if (p.x() < currentNode.key.x()) {
                     currentNode = currentNode.left;
                 }
-                else if (p.x() > currentNode.key.x()) {
+                else {
                     currentNode = currentNode.right;
                 }
                 compareX = false;
@@ -59,7 +59,7 @@ public class KdTree {
                 if (p.y() < currentNode.key.y()) {
                     currentNode = currentNode.left;
                 }
-                else if (p.y() > currentNode.key.y()) {
+                else {
                     currentNode = currentNode.right;
                 }
                 compareX = true;
