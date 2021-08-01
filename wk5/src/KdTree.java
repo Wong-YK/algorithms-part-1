@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class KdTree {
 
-    public static class Node {
+    private static class Node {
 
         Point2D key;
         Node left;
@@ -38,7 +38,6 @@ public class KdTree {
     // add the point to the set (if it is not already in the set)
     public void insert(Point2D p) {
         this.root = insert(this.root, p, true);
-        this.size++;
     }
 
     // does the set contain point p?
@@ -90,15 +89,17 @@ public class KdTree {
 
     private Node insert(Node n, Point2D p, boolean compareX) {
         if (n == null) {
+            this.size++;
             return new Node(p);
         }
+        if (n.key.equals(p)) { return n; }
         if (compareX) {
             if (p.x() < n.key.x()) { n.left = insert(n.left, p, false); }
-            else if (p.x() > n.key.x()) { n.right = insert(n.right, p, false); }
+            else { n.right = insert(n.right, p, false); }
         }
         else {
             if (p.y() < n.key.y()) { n.left = insert(n.left, p, true); }
-            else if (p.y() > n.key.y()) { n.right = insert(n.right, p, true); }
+            else { n.right = insert(n.right, p, true); }
         }
         return n;
     }
