@@ -177,7 +177,7 @@ public class KdTree {
             nearest = findNearestNeighbour(n.right, qp, nearest, right, !isHorizontal);
         }
         // first right then left
-        else if ( (isHorizontal && qp.y() > n.key.y()) || (!isHorizontal && qp.x() > n.key.x()) ) {
+        else {
             nearest = findNearestNeighbour(n.right, qp, nearest, right, !isHorizontal);
             nearest = findNearestNeighbour(n.left, qp, nearest, left, !isHorizontal);
         }

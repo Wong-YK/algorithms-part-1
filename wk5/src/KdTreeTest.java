@@ -290,7 +290,6 @@ public class KdTreeTest {
         kdt.insert(p8);
         kdt.insert(p9);
         kdt.insert(p10);
-        kdt.draw();
         ArrayList<Point2D> points = (ArrayList<Point2D>) kdt.range(r);
         assertTrue(points.contains(p1));
         assertTrue(points.contains(p2));
@@ -315,7 +314,7 @@ public class KdTreeTest {
     }
 
     @Test
-    // Nearest neighbour in KdTree of size 2
+    // Nearest neighbour in rhs KdTree of size 2
     public void nearestTest2() {
         Point2D p1 = new Point2D(0.2, 0.3);
         Point2D p2 = new Point2D(0.6,  0.5);
@@ -327,7 +326,7 @@ public class KdTreeTest {
     }
 
     @Test
-    // Nearest neighbour in KdTree of size 5
+    // Nearest neighbour in rhs of KdTree of size 5
     public void nearestTest3() {
         Point2D p1 = new Point2D(0.2, 0.3);
         Point2D p2 = new Point2D(0.6,  0.5);
@@ -344,4 +343,49 @@ public class KdTreeTest {
         assertEquals(p2, kdt.nearest(qp));
     }
 
+    @Test
+    // Nearest neighbour in lhs of KdTree of size 5
+    public void nearestTest4() {
+        Point2D p1 = new Point2D(0.2, 0.3);
+        Point2D p2 = new Point2D(0.6,  0.5);
+        Point2D p3 = new Point2D(0.1, 0.8);
+        Point2D p4 = new Point2D(0.9, 0.1);
+        Point2D p5 = new Point2D(0.5, 0.85);
+        KdTree kdt = new KdTree();
+        kdt.insert(p1);
+        kdt.insert(p2);
+        kdt.insert(p3);
+        kdt.insert(p4);
+        kdt.insert(p5);
+        Point2D qp = new Point2D(0.15, 0.7);
+        assertEquals(p3, kdt.nearest(qp));
+    }
+
+    @Test
+    // Nearest neighbour in lhs of KdTree of size 10
+    public void nearestTest5() {
+        Point2D p1 = new Point2D(0.2, 0.2);
+        Point2D p2 = new Point2D(0.1, 0.8);
+        Point2D p3 = new Point2D(0.5, 0.4);
+        Point2D p4 = new Point2D(0.7, 0.9);
+        Point2D p5 = new Point2D(0.9, 0.5);
+        Point2D p6 = new Point2D(0.8, 0.1);
+        Point2D p7 = new Point2D(0.15, 0.6);
+        Point2D p8 = new Point2D(0.05, 0.85);
+        Point2D p9 = new Point2D(0.3, 0.3);
+        Point2D p10 = new Point2D(0.85, 0.95);
+        KdTree kdt = new KdTree();
+        kdt.insert(p1);
+        kdt.insert(p2);
+        kdt.insert(p3);
+        kdt.insert(p4);
+        kdt.insert(p5);
+        kdt.insert(p6);
+        kdt.insert(p7);
+        kdt.insert(p8);
+        kdt.insert(p9);
+        kdt.insert(p10);
+        Point2D qp = new Point2D(0.2, 0.5);
+        assertEquals(p7, kdt.nearest(qp));
+    }
 }
