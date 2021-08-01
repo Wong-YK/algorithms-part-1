@@ -390,7 +390,7 @@ public class KdTreeTest {
     }
 
     @Test
-    // KdTree of size 5
+    // KdTree of size 5 (from autograder)
     public void nearestTest6() {
         Point2D p1 = new Point2D(0.7, 0.2);
         Point2D p2 = new Point2D(0.5, 0.4);
@@ -406,5 +406,6 @@ public class KdTreeTest {
         Point2D qp = new Point2D(0.534, 0.579);
         assertEquals(p4, kdt.nearest(qp));
     }
+
 
 }
