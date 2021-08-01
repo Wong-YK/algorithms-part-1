@@ -165,11 +165,11 @@ public class KdTree {
         if (nearest.distanceTo(qp) < left.distanceTo(qp) && (nearest.distanceTo(qp) < right.distanceTo(qp))) {
             // nearest remains unchanged
         }
-        else if (nearest.distanceTo(qp) < left.distanceTo(qp) && (nearest.distanceTo(qp) > right.distanceTo(qp))) {
-            nearest =  findNearestNeighbour(n.right, qp, nearest, right, !isHorizontal);
-        }
         else if ((nearest.distanceTo(qp) < right.distanceTo(qp)) && (nearest.distanceTo(qp) > left.distanceTo(qp))) {
             nearest =  findNearestNeighbour(n.left, qp, nearest, left, !isHorizontal);
+        }
+        else if (nearest.distanceTo(qp) < left.distanceTo(qp) && (nearest.distanceTo(qp) > right.distanceTo(qp))) {
+            nearest =  findNearestNeighbour(n.right, qp, nearest, right, !isHorizontal);
         }
         // first left then right
         else if ( (isHorizontal && qp.y() < n.key.y()) || (!isHorizontal && qp.x() < n.key.x()) ) {
