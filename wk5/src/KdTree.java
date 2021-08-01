@@ -37,11 +37,17 @@ public class KdTree {
 
     // add the point to the set (if it is not already in the set)
     public void insert(Point2D p) {
+        if (p == null) {
+            throw new IllegalArgumentException();
+        }
         this.root = insert(this.root, p, true);
     }
 
     // does the set contain point p?
     public boolean contains(Point2D p) {
+        if (p == null) {
+            throw new IllegalArgumentException();
+        }
         Node currentNode = this.root;
         boolean compareX = true;
         while (currentNode != null) {
@@ -76,6 +82,9 @@ public class KdTree {
 
     // all points that are inside the rectangle (or on the boundary)
     public Iterable<Point2D> range(RectHV rect) {
+        if (rect == null) {
+            throw new IllegalArgumentException();
+        }
         ArrayList<Point2D> result = new ArrayList<Point2D>();
         RectHV unitSquare = new RectHV(0.0, 0.0, 1.0, 1.0);
         findPointsContained(this.root, result, rect, unitSquare, false);
@@ -83,6 +92,9 @@ public class KdTree {
 
     // a nearest neighbor in the set to point p; null if the set is empty
     public Point2D nearest(Point2D p) {
+        if (p == null) {
+            throw new IllegalArgumentException();
+        }
         RectHV unitSquare = new RectHV(0.0, 0.0, 1.0, 1.0);
         return findNearestNeighbour(this.root, p, this.root.key, unitSquare, false);
     }
