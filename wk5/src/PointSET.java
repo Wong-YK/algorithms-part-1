@@ -49,7 +49,7 @@ public class PointSET {
         }
         SET<Point2D> result = new SET<Point2D>();
         for (Point2D p: this.points) {
-            if (p.x() >= rect.xmin() && p.x() <= rect.xmax() && p.y() >= rect.ymin() && p.y() <= rect.ymin()) {
+            if (p.x() >= rect.xmin() && p.x() <= rect.xmax() && p.y() >= rect.ymin() && p.y() <= rect.ymax()) {
                 result.add(p);
             }
         }
